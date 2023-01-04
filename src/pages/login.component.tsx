@@ -1,9 +1,12 @@
 import * as React from "react";
 import makeStyles from "@material-ui/styles/makeStyles";
 import createStyles from "@material-ui/styles/createStyles";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { LoginEntity, createEmptyLogin } from "../model/login";
+import { TextFieldComponent } from "../common";
+import { Formik } from "formik";
+import { loginFormValidation } from "./login.validation";
+import { Form } from "formik";
 
 interface PropsForm {
     onLogin: (login: LoginEntity) => void;
@@ -32,26 +35,21 @@ export const LoginComponent: React.FC<PropsForm> = (props) => {
     };
 
     return (
-        <div className={classes.formContainer}>
-            <TextField
-                label="Name"
-                margin="normal"
-                value={loginInfo.login}
-                onChange={onTextFieldChange("login")} />
-            <TextField
-                label="Password"
-                margin="normal"
-                type="password"
-                value={loginInfo.password}
-                onChange={onTextFieldChange("password")}
-            />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => onLogin(loginInfo)}
-            >
-                Login
-            </Button>
-        </div>
-    )
+        <Formik
+            onSubmit={onLogin}
+            initialValues={createEmptyLogin()}
+            validate={loginFormValidation.validateForm}
+        >
+
+            {() => (
+                <Form>
+                    <div className={classes.formContainer}>
+                        <TextFieldComponent label="Name" name="login" />
+                        <TextFieldComponent label="Password" type="password" name="password" />
+                        <Button type="submit" variant="contained" color="primary">Login</Button>
+                    </div>
+                </Form>
+            )}
+        </Formik>
+    );
 };
