@@ -8,7 +8,7 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import createStyles from "@material-ui/styles/createStyles";
 import makeStyles from "@material-ui/styles/makeStyles";
-import { NotificationComponent } from "../common";
+import { NotificationComponent, SessionContext } from "../common";
 
 const useFormStyles = makeStyles((theme) =>
     createStyles({
@@ -24,17 +24,19 @@ export const LoginContainer: React.FC<Props> = (props) => {
     const history = useHistory();
     const [isShowAlert, setShowAlert] = React.useState(false);
     const classes = useFormStyles();
+    const loginContext = React.useContext(SessionContext);
 
-    const loginSucceeded = (isValid: boolean) => {
+    const loginSucceeded = (isValid: boolean, login: LoginEntity) => {
         if (isValid) {
             history.push("/pageB");
+            loginContext.updateLogin(login.login);
         } else {
             setShowAlert(true);
         }
     };
 
     const handleLogin = (login: LoginEntity) => {
-        isValidLogin(login).then(loginSucceeded);
+        isValidLogin(login).then((isValid) => loginSucceeded(isValid, login));
     };
 
     return (
