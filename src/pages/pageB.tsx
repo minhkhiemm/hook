@@ -5,5 +5,5 @@ export const PageB = () =>
     <div>
         <h2>Hello from page B</h2>
         <br />
-        <Link to="/">Navigate to Page A</Link>
+        <Link to="/">Navigate to Login</Link>
     </div>
